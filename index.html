@@ -122,10 +122,10 @@
     </footer>
     <script>
         //API로 공공데이터 불러오기
-        const button = document.getElementsByClassName("button");
         const header = document.querySelector('header');
         const section = document.querySelector('section');
         const footer = document.querySelector('footer');
+        //footer.appendChild(myPara1); querySelector 사용법
 
         const myPara1 = document.getElementById('P1');
         const myPara2 = document.getElementById('P2');
@@ -133,33 +133,30 @@
         const myPara4 = document.getElementById('P4');
         const myPara5 = document.getElementById('P5');
         const myPara6 = document.getElementById('P6');
-
+        
         var xhr1 = new XMLHttpRequest();
         function weather_Check() {
             xhr1.open("GET", "get_weather.php");
             xhr1.send();
             $('.reload_weather').text('기상 데이터 로딩중...');
             $(".reload_weather").lettering();
-
-            console.log("xhr1.open & xhr1.send 실행\n");
+            console.log("run xhr1.open & xhr1.send\n");
         }
 
         xhr1.onload = function () {
             $('.reload_weather').text('기상 데이터 로딩 완료');
             $(".reload_weather").lettering();
-            console.log("readyState =" + xhr1.readyState + ", status =" + xhr1.status + "\n");
+            console.log("xhr1.onload readyState =" + xhr1.readyState + ", status =" + xhr1.status + "\n");
             if (xhr1.readyState == 4 && xhr1.status == 200) {
                 let weather_data = xhr1.response;
                 let weather_Parsed_Data = JSON.parse(weather_data);
                 currentWeather(weather_Parsed_Data);
             }
             else{            
-            $('.reload_weather').text('기상 데이터 로딩 실패');
-            $(".reload_weather").lettering();
-            console.log("기상 데이터 불러오기 실패\n");
-        }
-
-                
+                $('.reload_weather').text('기상 데이터 로딩 실패');
+                $(".reload_weather").lettering();
+                console.log("기상 데이터 불러오기 실패\n");
+            }
         }
         function currentWeather(obj) {
             const item = obj.response.body.items.item;
@@ -213,18 +210,12 @@
             xhr2.send();
             $('.reload_Air_Pollution').text('미세먼지 데이터 로딩중...');
             $(".reload_Air_Pollution").lettering();
-
-            console.log("xhr2.open & xhr2.send 실행\n");
-        }
-        function currentAirPol(obj) {
-            const item = obj.response.body.items[0];
-            const pm10Value = item.pm10Value;
-            myPara6.innerHTML = pm10Value + "㎍/㎥";
+            console.log("run xhr2.open & xhr2.send \n");
         }
         xhr2.onload = function () {
             $('.reload_Air_Pollution').text('미세먼지 데이터 로딩 완료');
             $(".reload_Air_Pollution").lettering();
-            console.log("readyState =" + xhr2.readyState + ", status =" + xhr1.status + "\n");
+            console.log("xhr2.onload readyState =" + xhr2.readyState + ", status =" + xhr2.status + "\n");
             if (xhr2.readyState == 4 && xhr2.status == 200) {
                 let Air_Pollution = xhr2.response;
                 let Air_Pollution_Parsed_Data = JSON.parse(Air_Pollution);
@@ -237,7 +228,7 @@
             }
                 
         }
-        function currentAir_Pollution(obj) {
+        function current_Air_Pollution(obj) {
             const item = obj.response.body.items[0];
             const pm10Value = item.pm10Value;
             myPara6.innerHTML = pm10Value+"㎍/㎥";

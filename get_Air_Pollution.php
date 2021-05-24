@@ -66,15 +66,15 @@ $YYYYMMDD = (string)$Year . '-'. $Month .'-'. $Day;
 
 $ch = curl_init();
 $url1 = 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty'; 
-$queryParams = '?' . urlencode('serviceKey') . '=' . 'MZVaUPWHOFbsrQMtZXU8n5rCRvizs2l%2FkejesIzGvC%2FTdgCs8iRrgK%2B5%2FgMoCKrH9%2BZzIiPO5S0WlGnNAdki4A%3D%3D'; /**/
+$queryParams = '?' . urlencode('ServiceKey') . '=' . 'MZVaUPWHOFbsrQMtZXU8n5rCRvizs2l%2FkejesIzGvC%2FTdgCs8iRrgK%2B5%2FgMoCKrH9%2BZzIiPO5S0WlGnNAdki4A%3D%3D'; /**/
 $queryParams .= '&' . urlencode('returnType') . '=' . urlencode('json');
 $queryParams .= '&' . urlencode('numOfRows') . '=' . urlencode('100'); 
 $queryParams .= '&' . urlencode('pageNo') . '=' . urlencode('1');
-$queryParams .= '&' . urlencode('stationName') . '=' . '진천동'; 
+$queryParams .= '&' . urlencode('stationName') . '=' . urlencode('진천동');
 $queryParams .= '&' . urlencode('dataTerm') . '=' . urlencode('DAILY'); 
 // $queryParams .= '&' . urlencode('ver') . '=' . urlencode('1.0'); 
 
-curl_setopt($ch, CURLOPT_URL, $url1.$queryParams);
+curl_setopt($ch, CURLOPT_URL, $url1 . $queryParams);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 curl_setopt($ch, CURLOPT_HEADER, FALSE);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
