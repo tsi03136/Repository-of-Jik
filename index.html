@@ -140,12 +140,14 @@
             xhr1.send();
             $('.reload_weather').text('기상 데이터 로딩중...');
             $(".reload_weather").lettering();
+            console_clock();
             console.log("run xhr1.open & xhr1.send\n");
         }
 
         xhr1.onload = function () {
             $('.reload_weather').text('기상 데이터 로딩 완료');
             $(".reload_weather").lettering();
+            console_clock();
             console.log("xhr1.onload readyState =" + xhr1.readyState + ", status =" + xhr1.status + "\n");
             if (xhr1.readyState == 4 && xhr1.status == 200) {
                 let weather_data = xhr1.response;
@@ -155,6 +157,7 @@
             else{            
                 $('.reload_weather').text('기상 데이터 로딩 실패');
                 $(".reload_weather").lettering();
+                console_clock();
                 console.log("기상 데이터 불러오기 실패\n");
             }
         }
@@ -210,11 +213,13 @@
             xhr2.send();
             $('.reload_Air_Pollution').text('미세먼지 데이터 로딩중...');
             $(".reload_Air_Pollution").lettering();
+            console_clock();
             console.log("run xhr2.open & xhr2.send \n");
         }
         xhr2.onload = function () {
             $('.reload_Air_Pollution').text('미세먼지 데이터 로딩 완료');
             $(".reload_Air_Pollution").lettering();
+            console_clock();
             console.log("xhr2.onload readyState =" + xhr2.readyState + ", status =" + xhr2.status + "\n");
             if (xhr2.readyState == 4 && xhr2.status == 200) {
                 let Air_Pollution = xhr2.response;
@@ -224,6 +229,7 @@
             else{
             $('.reload_Air_Pollution').text('미세먼지 데이터 로딩 실패');
             $(".reload_Air_Pollution").lettering();
+            console_clock();
                 console.log("미세먼지 API 불러오기 실패\n");
             }
                 
@@ -237,10 +243,9 @@
 
         //실시간 시간 표시하기
         var clockTarget = document.getElementById("clock");
-
-        function clock() {
-            var date = new Date();
+        var date = new Date();
             // date Object를 받아오고 
+            var year = date.getFullYear();
             var month = date.getMonth();
             // 달을 받아옵니다 
             var clockDate = date.getDate();
@@ -255,6 +260,8 @@
             // 분도 받아옵니다.
             var seconds = date.getSeconds();
             // 초까지 받아온후 
+
+        function clock() {
             clockTarget.innerText = `${month + 1}월 ${clockDate}일 ${week[day]}요일 ` + `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
             // 월은 0부터 1월이기때문에 +1일을 해주고 
             // 시간 분 초는 한자리수이면 시계가 어색해보일까봐 10보다 작으면 앞에0을 붙혀주는 작업을 3항연산으로 했습니다. 
@@ -264,7 +271,9 @@
                 air_Pollution_Check();
             }
         }
-
+        function console_clock(){
+            console.log(year+'/'+(month+1)+'/'+clockDate+'_'+hours+':'+minutes+':'+seconds);
+        }
         $(".button").click(
             function () {
                 weather_Check();
