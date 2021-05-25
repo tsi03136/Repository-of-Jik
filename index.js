@@ -1,7 +1,6 @@
 $(document).ready(function () {
     $(".title").lettering();
     $(".button").lettering();
-    
   });
 
   $(document).ready(function () {
