@@ -94,3 +94,68 @@ h1{
       opacity: 1;
     }
   }
+  table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th {
+            font-size: 10pt;
+        }
+
+        td {
+            width: 300px;
+            font-size: 8pt;
+        }
+
+        #head_container {
+            width: 100%;
+            text-align: center;
+            padding: 30px 0 10px 0;
+        }
+
+        #section_container {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0 10px 0;
+        }
+
+        #footer_container {
+            width: 1000px;
+        }
+
+        #inside_section_container {
+            width: 1000px;
+            text-align: center;
+            margin: 0 auto;
+            padding: 0 0 0 auto;
+        }
+
+        #clock {
+            text-align: left;
+            padding: 0 0 0 270px;
+        }
+
+        #section_table_1>th {
+            width: 200px;
+        }
+        .level_Color_0{
+          color : #00ff2a;
+        }
+        .level_Color_1{
+          color : #fffb00;
+        }
+        .level_Color_2{
+          color : #ff9100;
+        }
+        .level_Color_3{
+          color : #ff3300;
+        }
+        .level_Color_4{
+          color : #5c0303;
+        }
+        .level_Color_5{
+          color : #000000;
+        }

@@ -11,53 +11,7 @@
     <link rel="stylesheet" href="index.css" type="text/css">
     <title>current Weather</title>
     <style>
-        table,
-        th,
-        td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
 
-        th {
-            font-size: 10pt;
-        }
-
-        td {
-            width: 300px;
-            font-size: 8pt;
-        }
-
-        #head_container {
-            width: 100%;
-            text-align: center;
-            padding: 30px 0 10px 0;
-        }
-
-        #section_container {
-            width: 100%;
-            text-align: center;
-            padding: 10px 0 10px 0;
-        }
-
-        #footer_container {
-            width: 1000px;
-        }
-
-        #inside_section_container {
-            width: 1000px;
-            text-align: center;
-            margin: 0 auto;
-            padding: 0 0 0 auto;
-        }
-
-        #clock {
-            text-align: left;
-            padding: 0 0 0 270px;
-        }
-
-        #section_table_1>th {
-            width: 200px;
-        }
     </style>
 </head>
 
@@ -121,7 +75,8 @@
                     </tr>
                 </table>
                 <div>
-                    <span id="arduino_WInd_Pos" style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
+                    <span id="arduino_WInd_Pos"
+                        style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
                     <span style="font-size : 8px; position : relative; left:21% top :20px">←공공데이터</span>
 
                     <table id="section_table_1" style="width: 400px;margin:0 auto;">
@@ -131,32 +86,34 @@
                             <th style="width:62%">해설</th>
                         </tr>
                         <tr>
-                            <td>0등급</tㅇ>
+                            <td class="level_Color_0">0등급</tㅇ>
                             <td>0~0.2</td>
-                            <td>연기가 위로 똑바로 올라가는 상태</td>
+                            <td>연기가 위로 똑바르게 올라가는 상태<p></p>
+                            </td>
                         </tr>
                         <tr>
-                            <td>1등급</td>
+                            <td class="level_Color_1">1등급</td>
                             <td>0.3~1.5</td>
                             <td>연기가 날리는 것은 알 수 있으나, 바람개비로는 감지 불가</td>
                         </tr>
                         <tr>
-                            <td>2등급</td>
+                            <td class="level_Color_2">2등급</td>
                             <td>1.6~3.3</td>
                             <td>얼굴로 바람이 느껴지고 나뭇잎이 흔들리고 바람개비로 감지 가능</td>
                         </tr>
                         <tr>
-                            <td>3등급</td>
+                            <td class="level_Color_3">3등급</td>
                             <td>3.4~5.4</td>
-                            <td>나뭇잎과 가는 가지가 쉴새 없이 흔들림</td>
+                            <td>나뭇잎과 가는 가지가 쉴새 없이 흔들림<p></p>
+                            </td>
                         </tr>
                         <tr>
-                            <td>4등급</td>
+                            <td class="level_Color_4">4등급</td>
                             <td>5.5~7.9</td>
                             <td>먼지가 일고 종이 조각이 날리며 작은 나뭇가지가 흔들리는 정도</td>
                         </tr>
                         <tr>
-                            <td>5등급</td>
+                            <td class="level_Color_5">5등급</td>
                             <td>8~10.7</td>
                             <td>잎이 무성한 작은 나무 전체가 흔들리고 강물에 잔물결이 일어남</td>
                         </tr>
@@ -214,11 +171,35 @@
                 console.log("기상 데이터 불러오기 실패\n");
             }
         }
-
+        var obser_V = 10.7;
+        if (obser_V <= 0.2) {
+            $('#arduino_WInd_Pos').css({ "position": "relative", "top": "58px" });
+            console.log(20);
+        }
+        else if (obser_V <= 1.5) {
+            $('#arduino_WInd_Pos').css({ "position": "relative", "top": "88px" });
+            console.log(20);
+        }
+        else if (obser_V <= 3.3) {
+            $('#arduino_WInd_Pos').css({ "position": "relative", "top": "118px" });
+            console.log(20);
+        }
+        else if (obser_V <= 5.4) {
+            $('#arduino_WInd_Pos').css({ "position": "relative", "top": "148px" });
+            console.log(40);
+        }
+        else if (obser_V <= 7.9) {
+            $('#arduino_WInd_Pos').css({ "position": "relative", "top": "178px" });
+            console.log(50);
+        }
+        else if (obser_V <= 10.7) {
+            $('#arduino_WInd_Pos').css({ "position": "relative", "top": "208px" });
+            console.log(60);
+        }
         function currentWeather(obj) {
             const item = obj.response.body.items.item;
             for (var i = 0; i < item.length; i++) {
-                const obser_V = item[i].obsrValue;
+                //const obser_V = item[i].obsrValue;
                 const cat = item[i].category;
                 if (cat == "PTY") {
                     if (obser_V == 0) {
@@ -258,23 +239,24 @@
                 else if (cat == "WSD") {
                     myPara5.innerHTML = obser_V + 'm/s';
                     if (obser_V <= 0.2) {
-                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "55px"});
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": "55px" });
                         console.log(20);
                     }
                     else if (obser_V <= 1.5) {
-                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "78px"});
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": "78px" });
                         console.log(20);
                     }
+
                     else if (obser_V <= 5.4) {
-                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "137px"});
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": "137px" });
                         console.log(40);
                     }
                     else if (obser_V <= 7.9) {
-                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "158px"});
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": "158px" });
                         console.log(50);
                     }
                     else if (obser_V <= 10.7) {
-                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "190px"});
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": "190px" });
                         console.log(60);
                     }
                 }
