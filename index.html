@@ -19,7 +19,12 @@
         }
 
         th {
+            font-size: 10pt;
+        }
+
+        td {
             width: 300px;
+            font-size: 8pt;
         }
 
         #head_container {
@@ -42,11 +47,16 @@
             width: 1000px;
             text-align: center;
             margin: 0 auto;
+            padding: 0 0 0 auto;
         }
 
         #clock {
             text-align: left;
             padding: 0 0 0 270px;
+        }
+
+        #section_table_1>th {
+            width: 200px;
         }
     </style>
 </head>
@@ -110,6 +120,48 @@
                         <td></td>
                     </tr>
                 </table>
+                <div>
+                    <span id="arduino_WInd_Pos" style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
+                    <span style="font-size : 8px; position : relative; left:21% top :20px">←공공데이터</span>
+
+                    <table id="section_table_1" style="width: 400px;margin:0 auto;">
+                        <tr>
+                            <th style="width:20%">단위 (m/s)</th>
+                            <th style="width:18%">바람 세기 기준치</th>
+                            <th style="width:62%">해설</th>
+                        </tr>
+                        <tr>
+                            <td>0등급</tㅇ>
+                            <td>0~0.2</td>
+                            <td>연기가 위로 똑바로 올라가는 상태</td>
+                        </tr>
+                        <tr>
+                            <td>1등급</td>
+                            <td>0.3~1.5</td>
+                            <td>연기가 날리는 것은 알 수 있으나, 바람개비로는 감지 불가</td>
+                        </tr>
+                        <tr>
+                            <td>2등급</td>
+                            <td>1.6~3.3</td>
+                            <td>얼굴로 바람이 느껴지고 나뭇잎이 흔들리고 바람개비로 감지 가능</td>
+                        </tr>
+                        <tr>
+                            <td>3등급</td>
+                            <td>3.4~5.4</td>
+                            <td>나뭇잎과 가는 가지가 쉴새 없이 흔들림</td>
+                        </tr>
+                        <tr>
+                            <td>4등급</td>
+                            <td>5.5~7.9</td>
+                            <td>먼지가 일고 종이 조각이 날리며 작은 나뭇가지가 흔들리는 정도</td>
+                        </tr>
+                        <tr>
+                            <td>5등급</td>
+                            <td>8~10.7</td>
+                            <td>잎이 무성한 작은 나무 전체가 흔들리고 강물에 잔물결이 일어남</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </section>
@@ -162,6 +214,7 @@
                 console.log("기상 데이터 불러오기 실패\n");
             }
         }
+
         function currentWeather(obj) {
             const item = obj.response.body.items.item;
             for (var i = 0; i < item.length; i++) {
@@ -204,6 +257,26 @@
                 }
                 else if (cat == "WSD") {
                     myPara5.innerHTML = obser_V + 'm/s';
+                    if (obser_V <= 0.2) {
+                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "55px"});
+                        console.log(20);
+                    }
+                    else if (obser_V <= 1.5) {
+                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "78px"});
+                        console.log(20);
+                    }
+                    else if (obser_V <= 5.4) {
+                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "137px"});
+                        console.log(40);
+                    }
+                    else if (obser_V <= 7.9) {
+                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "158px"});
+                        console.log(50);
+                    }
+                    else if (obser_V <= 10.7) {
+                        $('#arduino_WInd_Pos').css({"position" : "relative","top" : "190px"});
+                        console.log(60);
+                    }
                 }
             }
         }
@@ -250,9 +323,9 @@
             console_clock();
             console.log("xhr3.onload readyState =" + xhr3.readyState + ", status =" + xhr3.status + "\n");
             if (xhr3.readyState == 4 && xhr3.status == 200) {
-                console.log("get_WebPage 결과값 : "+xhr3.response);
+                console.log("get_WebPage 결과값 : " + xhr3.response);
             }
-            else{            
+            else {
                 $('.reload_weather').text('기상 데이터 로딩 실패');
                 $(".reload_weather").lettering();
                 console_clock();
@@ -291,7 +364,7 @@
                 air_Pollution_Check();
             }
         }
-        
+
         function console_clock() {
             //실시간 시간 표시하기
             var clockTarget = document.getElementById("clock");
@@ -312,7 +385,7 @@
             // 분도 받아옵니다.
             var seconds = date.getSeconds();
             // 초까지 받아온후 
-            console.log(year + '/' + (month + 1) + '/' + clockDate + '_' + hours + ':' + minutes + ':' + seconds);
+            console.log(year + '/' + (month + 1) + '/' + clockDate + ' _ ' + hours + ':' + minutes + ':' + seconds);
         }
         $(".button").click(
             function () {
