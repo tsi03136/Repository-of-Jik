@@ -11,7 +11,77 @@
     <link rel="stylesheet" href="index.css" type="text/css">
     <title>current Weather</title>
     <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
 
+        th {
+            font-size: 10pt;
+        }
+
+        td {
+            width: 300px;
+            font-size: 8pt;
+        }
+
+        #head_container {
+            width: 100%;
+            text-align: center;
+            padding: 30px 0 10px 0;
+        }
+
+        #section_container {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0 10px 0;
+        }
+
+        #footer_container {
+            width: 1000px;
+        }
+
+        #inside_section_container {
+            width: 1000px;
+            text-align: center;
+            margin: 0 auto;
+            padding: 0 0 0 auto;
+        }
+
+        #clock {
+            text-align: left;
+            padding: 0 0 0 270px;
+        }
+
+        #section_table_1>th {
+            width: 200px;
+        }
+
+        .level_Color_0 {
+            color: #00ff2a;
+        }
+
+        .level_Color_1 {
+            color: #fffb00;
+        }
+
+        .level_Color_2 {
+            color: #ff9100;
+        }
+
+        .level_Color_3 {
+            color: #ff3300;
+        }
+
+        .level_Color_4 {
+            color: #5c0303;
+        }
+
+        .level_Color_5 {
+            color: #000000;
+        }
     </style>
 </head>
 
@@ -171,7 +241,7 @@
                 console.log("기상 데이터 불러오기 실패\n");
             }
         }
-        
+
 
         function currentWeather(obj) {
             const item = obj.response.body.items.item;
@@ -217,22 +287,22 @@
                     myPara5.innerHTML = obser_V + 'm/s';
                     var a = 61;
                     if (obser_V <= 0.2) {
-                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a+"px" });
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a + "px" });
                     }
                     else if (obser_V <= 1.5) {
-                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a+30+"px" });
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a + 30 + "px" });
                     }
                     else if (obser_V <= 3.3) {
-                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a+62+"px" });
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a + 62 + "px" });
                     }
                     else if (obser_V <= 5.4) {
-                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a+93+"px" });
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a + 93 + "px" });
                     }
                     else if (obser_V <= 7.9) {
-                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a+125+"px" });
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a + 125 + "px" });
                     }
                     else if (obser_V <= 10.7) {
-                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a+160+"px" });
+                        $('#arduino_WInd_Pos').css({ "position": "relative", "top": a + 160 + "px" });
                     }
                 }
             }
