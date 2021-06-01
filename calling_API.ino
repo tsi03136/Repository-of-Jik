@@ -1,0 +1,206 @@
+#include <ezTask.h>
+#include <ESP8266WiFi.h>
+
+const char* ssid     = "KT_GiGA_AD11";
+const char* password = "cfd82xf772"; 
+const char* host = "apis.data.go.kr";
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(115200);
+  delay(10);
+  Serial.println("setup() START");
+ 
+  // We start by connecting to a WiFi network
+ 
+  Serial.println();
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  
+  WiFi.begin(ssid, password);
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+ 
+  Serial.println("");
+  Serial.println("WiFi connected");  
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+}
+
+ezTask task1(1000,[](){ // 미세먼지
+  delay(5000);
+ int i=0;
+ String tmp_str;
+ String wfEn10;
+ String wfEn25;
+ String wfEntest;
+  Serial.print("connecting to ");
+  Serial.println(host);
+ 
+  // Use WiFiClient class to create TCP connections
+  WiFiClient client;
+  const int httpPort = 80;
+  if (!client.connect(host, httpPort)) {
+    Serial.println("connection failed");
+    return;
+  }
+ 
+  // Request
+  // Call Address
+ String url = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?serviceKey=TfNuVVqnjKaZ9N198WGqwTjbohrzGAy48OP39UynQWR0yl7NFOYZtMgzatuNyJVGE7c0o%2FOtZh8QORMDclitzg%3D%3D&returnType=xml&numOfRows=1&pageNo=1&stationName=%EC%A7%84%EC%B2%9C%EB%8F%99&dataTerm=DAILY&ver=1.0";
+  Serial.print("Requesting URL: ");
+  Serial.println(url); // call Address (api)
+ 
+  // This will send the request to the server
+  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+               "Host: " + host + "\r\n" + 
+               "Connection: close\r\n\r\n");
+  unsigned long timeout = millis();
+  while (client.available() == 0) {
+    if (millis() - timeout > 5000) {
+      Serial.println(">>> Client Timeout !");
+      client.stop();
+      return;
+    }
+  }
+  // This will send the request to the server
+  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+               "Host: " + host + "\r\n" + 
+               "Connection: close\r\n\r\n");
+
+  while (client.available() == 0) {
+    if (millis() - timeout > 5000) {
+      Serial.println(">>> Client Timeout !");
+      client.stop();
+      return;
+    }
+  }
+  // Read all the lines of the reply from server and print them to Serial
+  while(client.available()){
+    String line = client.readStringUntil('\r');
+    Serial.print(line);
+    
+    i= line.indexOf("</pm10Value>");
+
+    if(i>0){
+      tmp_str="<pm10Value>";
+      wfEn10 = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
+      //Serial.println(wfEn10);  
+    }
+     i= line.indexOf("</pm25Value>");
+
+    if(i>0){
+      tmp_str="<pm25Value>";
+      wfEn25 = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
+      //Serial.println(wfEn25);  
+    }  
+  }
+ 
+  Serial.println();
+  Serial.println("closing connection");
+  Serial.println("PM 10 : "+wfEn10); 
+  Serial.println("PM 25 : "+wfEn25);
+  delay(10000);
+});
+
+ezTask task2(2000,[](){ // 날씨
+  delay(5000);
+ int i=0;
+ int j=0;
+ String tmp_str;
+ String tmp_str1;
+ String tmp_str2;
+ String wfEn10;
+ String wfEn25;
+ String wfEn30;
+ String wfEn40;
+ String wfEn50;
+  Serial.print("connecting to ");
+  Serial.println(host);
+ 
+  // Use WiFiClient class to create TCP connections
+  WiFiClient client;
+  const int httpPort = 80;
+  if (!client.connect(host, httpPort)) {
+    Serial.println("connection failed");
+    return;
+  }
+ 
+  // Request
+  // Call Address
+ String url= "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst?serviceKey=TfNuVVqnjKaZ9N198WGqwTjbohrzGAy48OP39UynQWR0yl7NFOYZtMgzatuNyJVGE7c0o%2FOtZh8QORMDclitzg%3D%3D&pageNo=1&numOfRows=10000&dataType=XML&base_date=20210601&base_time=0600&nx=90&ny=91";
+ 
+  Serial.print("Requesting URL: ");
+  Serial.println(url); // call Address (api)
+ 
+  // This will send the request to the server
+  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+               "Host: " + host + "\r\n" + 
+               "Connection: close\r\n\r\n");
+  unsigned long timeout = millis();
+  while (client.available() == 0) {
+    if (millis() - timeout > 5000) {
+      Serial.println(">>> Client Timeout !");
+      client.stop();
+      return;
+    }
+  }
+  //Serial.println();
+  
+ 
+  // Read all the lines of the reply from server and print them to Serial
+  while(client.available()){
+    String line = client.readStringUntil('\r');
+    Serial.print(line);
+    
+    //기온시작
+    i= line.indexOf("UUU");
+
+    if(i>0){
+      
+      tmp_str="T1H";
+      wfEn10 = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
+      //Serial.println(wfEn10); 
+
+
+      j= wfEn10.indexOf("</obsrValue>");      
+          if(j>0){
+      tmp_str1 = "<obsrValue>";
+      wfEn30 = wfEn10.substring(wfEn10.indexOf(tmp_str1)+tmp_str1.length(),j);
+    }
+  }
+    
+    /***********************************************************************************/
+     //습도시작
+     i= line.indexOf("RN1");
+
+    if(i>0){
+      tmp_str="REH";
+      wfEn10 = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
+
+      j= wfEn10.indexOf("</obsrValue>");      
+      if(j>0){
+        tmp_str1 = "<obsrValue>";
+        wfEn40 = wfEn10.substring(wfEn10.indexOf(tmp_str1)+tmp_str1.length(),j);
+        }
+      }
+ 
+  Serial.println();
+  Serial.println("closing connection");
+  Serial.println("기온 : "+wfEn30); 
+  Serial.println("습도 : "+wfEn40);
+  delay(10000);
+}});
+
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  task1.run();
+  task2.run();
+
+}
