@@ -32,7 +32,7 @@ void setup() {
 
 }
 
-ezTask task1(1000,[](){ // 미세먼지
+ezTask task1(1000,[](){
   delay(5000);
  int i=0;
  String tmp_str;
@@ -83,7 +83,7 @@ ezTask task1(1000,[](){ // 미세먼지
   // Read all the lines of the reply from server and print them to Serial
   while(client.available()){
     String line = client.readStringUntil('\r');
-    Serial.print(line);
+    //Serial.print(line);
     
     i= line.indexOf("</pm10Value>");
 
@@ -105,10 +105,10 @@ ezTask task1(1000,[](){ // 미세먼지
   Serial.println("closing connection");
   Serial.println("PM 10 : "+wfEn10); 
   Serial.println("PM 25 : "+wfEn25);
-  delay(10000);
+  delay(1000);
 });
 
-ezTask task2(2000,[](){ // 날씨
+ezTask task2(2000,[](){
   delay(5000);
  int i=0;
  int j=0;
@@ -116,10 +116,14 @@ ezTask task2(2000,[](){ // 날씨
  String tmp_str1;
  String tmp_str2;
  String wfEn10;
- String wfEn25;
+ String wfEn20;
  String wfEn30;
  String wfEn40;
  String wfEn50;
+ String wfEn60;
+ String wfEn70;
+ String wfEn80;
+ String wfEn90;
   Serial.print("connecting to ");
   Serial.println(host);
  
@@ -156,9 +160,8 @@ ezTask task2(2000,[](){ // 날씨
   // Read all the lines of the reply from server and print them to Serial
   while(client.available()){
     String line = client.readStringUntil('\r');
-    Serial.print(line);
+    //Serial.print(line);
     
-    //기온시작
     i= line.indexOf("UUU");
 
     if(i>0){
@@ -174,28 +177,29 @@ ezTask task2(2000,[](){ // 날씨
       wfEn30 = wfEn10.substring(wfEn10.indexOf(tmp_str1)+tmp_str1.length(),j);
     }
   }
-    
-    /***********************************************************************************/
-     //습도시작
+  /********************************************************************************/
+  //습도
      i= line.indexOf("RN1");
 
     if(i>0){
       tmp_str="REH";
-      wfEn10 = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
-
-      j= wfEn10.indexOf("</obsrValue>");      
-      if(j>0){
+      wfEn20 = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
+      //Serial.println(wfEn20); 
+      
+      j=wfEn20.indexOf("</obsrValue>"); 
+      if(j>0) {
         tmp_str1 = "<obsrValue>";
-        wfEn40 = wfEn10.substring(wfEn10.indexOf(tmp_str1)+tmp_str1.length(),j);
-        }
+        wfEn40 = wfEn20.substring(wfEn20.indexOf(tmp_str1)+tmp_str1.length(),j);
       }
+      }
+   }
  
   Serial.println();
   Serial.println("closing connection");
   Serial.println("기온 : "+wfEn30); 
   Serial.println("습도 : "+wfEn40);
-  delay(10000);
-}});
+  delay(1000);
+});
 
 
 void loop() {
