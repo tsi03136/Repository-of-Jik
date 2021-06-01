@@ -192,12 +192,46 @@ ezTask task2(2000,[](){
         wfEn40 = wfEn20.substring(wfEn20.indexOf(tmp_str1)+tmp_str1.length(),j);
       }
       }
+  /********************************************************************************/
+  //1시간 강수량
+  i= line.indexOf("T1H");
+
+    if(i>0){
+      tmp_str="RN1";
+      wfEn50 = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
+      //Serial.println(wfEn20); 
+      
+      j=wfEn50.indexOf("</obsrValue>"); 
+      if(j>0) {
+        tmp_str1 = "<obsrValue>";
+        wfEn60 = wfEn50.substring(wfEn50.indexOf(tmp_str1)+tmp_str1.length(),j);
+      }
+      }
+  /********************************************************************************/
+  //풍속
+  i= line.indexOf("<numOfRows>");
+
+    if(i>0){
+      tmp_str="WSD";
+      wfEn70 = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
+      //Serial.println(wfEn20); 
+      
+      j=wfEn70.indexOf("</obsrValue>"); 
+      if(j>0) {
+        tmp_str1 = "<obsrValue>";
+        wfEn80 = wfEn70.substring(wfEn70.indexOf(tmp_str1)+tmp_str1.length(),j);
+      }
+      }
+
+  
    }
  
   Serial.println();
   Serial.println("closing connection");
   Serial.println("기온 : "+wfEn30); 
   Serial.println("습도 : "+wfEn40);
+  Serial.println("1시간 강수량 : "+wfEn60);
+  Serial.println("풍속 : "+wfEn80);
   delay(1000);
 });
 
