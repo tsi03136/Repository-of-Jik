@@ -1,6 +1,6 @@
 #include <SoftwareSerial.h>
 
-SoftwareSerial mySerial(5, 4); // RX, TX로 먼지센서의 TX와 RX에 각각 연결됨
+SoftwareSerial mySerial(5, 4); //mySerial(TX, RX) GPIO 5 to TX,GPIO 4 to RX
 
 void setup() {
   // for debuging 
