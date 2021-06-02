@@ -20,9 +20,6 @@ void rpm (){     //This is the function that the interupt calls
   pulse++;  //This function measures the rising and falling edge of the hall effect sensors signal
 } 
 
-
-
-
 // The setup() method runs once, when the sketch starts
 void setup() //
 { 
