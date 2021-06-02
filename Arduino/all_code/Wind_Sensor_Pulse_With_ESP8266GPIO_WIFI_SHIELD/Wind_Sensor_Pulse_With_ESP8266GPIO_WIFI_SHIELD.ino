@@ -7,12 +7,9 @@
 //5. 배선 TX, RX 가 이상 없는지 확인 (포스팅 상단 아두이노 장착시 배선 참조)
 
 #include <ESP8266WiFi.h>
-//#include <WiFiClient.h>
-//#include <ESP8266WebServer.h>
-//#include <ESP8266mDNS.h>
 
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "hdch";
+const char* password = "12345678";
 WiFiServer server(80);
 
 int pulse; //measuring the rising edges of the signal
@@ -30,7 +27,7 @@ void rpm (){     //This is the function that the interupt calls
 void setup() //
 { 
   pinMode(air_velocity_transducer, INPUT); //initializes digital pin 2 as an input
-  //Serial.begin(115200); //This is the setup function where the serial port is initialised,
+  
   attachInterrupt(digitalPinToInterrupt(air_velocity_transducer), rpm, RISING); //and the interrupt is attached
   
   Serial.begin(115200);
@@ -57,12 +54,19 @@ void setup() //
   Serial.print("IP address: ");
   // Printing the ESP IP address
   Serial.println(WiFi.localIP());
-} 
+}
 
 // the loop() method runs over and over again,
 // as long as the Arduino has power
 void loop (){
   WiFiClient client = server.available();
+  pulse = 0;   
+  interrupts();      //Enables interrupts
+  delay(1000);
+  noInterrupts();      //Disable interrupts
+  wind_speed = ( pulse * 0.0875+0.1); 
+  Serial.print (wind_speed, 1); //Prints the number calculated above
+  Serial.print (" m/s\n"); //Prints "m/s" and returns a  new line
   
   if (client) {
     Serial.println("New client");
@@ -72,17 +76,12 @@ void loop (){
       if (client.available()) {
         char c = client.read();
           if (c == '\n' && blank_line) {
-          pulse = 0;   
-          interrupts();      //Enables interrupts
-          delay(1000);
-          noInterrupts();      //Disable interrupts
-          wind_speed = ( pulse * 0.0875+0.1); 
-          Serial.print (wind_speed, 1); //Prints the number calculated above
-          Serial.print (" m/s\n"); //Prints "m/s" and returns a  new line
+          
           
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
           client.println("Connection: close");
+          client.println("refresh : 1");
           client.println();
   
           client.println("<!DOCTYPE HTML>");
