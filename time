@@ -3,6 +3,7 @@
  * 일단 구글서버(google.com)에 접속한다음 head를 요청해서 시간값을 가져온다음
  * 우리나라에 맞게 local time을 계산해서 활용할 수 있도록 해보자!
  * 앞으로 진행될 예제에 local time이 필요한 상황이 많을 것 같으므로 함수로 구현해보자!
+ * https://www.youtube.com/watch?v=ft0wrg390eM 관련 유튜브 주소
  */
 
 #include <ESP8266WiFi.h>
