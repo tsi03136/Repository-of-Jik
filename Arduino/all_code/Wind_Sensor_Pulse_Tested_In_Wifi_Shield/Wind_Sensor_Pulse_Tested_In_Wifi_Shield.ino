@@ -87,7 +87,7 @@ void setup() //
 // the loop() method runs over and over again,
 // as long as the Arduino has power
 void loop (){
-  WiFiClient client = server.available();
+  
 
   pulse = 0;   
   interrupts();      //Enables interrupts
