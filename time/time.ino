@@ -44,12 +44,15 @@ void loop() {
   Nocktime nt;
   if(get_nocktime(nt)){
     //정상적으로 값을 받은경우
-    Serial.print("YEAR=");
-    Serial.println(nt.year);
-    Serial.print("MONTH=");
-    Serial.println(nt.month);
-    Serial.print("DAY=");
-    Serial.println(nt.day);
+    
+    Serial.print("YEAR+MONTH+DAY=");
+    String st_year = String(nt.year);
+    String st_month = String(nt.month);
+    String st_Day = String(nt.day);
+    
+    String ymd = st_year +"0"+st_month+"0"+st_Day;
+    
+    Serial.println(ymd);
     Serial.print("HOUR=");
     Serial.println(nt.hour);
     Serial.print("MINUTE=");
