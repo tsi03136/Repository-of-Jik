@@ -8,8 +8,8 @@
 
 #include <ESP8266WiFi.h>
 
-const char* ssid     = "KT_GiGA_AD11";
-const char* password = "cfd82xf772"; 
+const char* ssid     = "V30_8308";
+const char* password = "11111112"; 
 
 WiFiClient client;
 
@@ -37,9 +37,6 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-
-  
-  
   Serial.println("DONE");
 }
 
@@ -74,8 +71,6 @@ void loop() {
   }else{
     //에러가난경우
   }
-   
-
   delay(3000);
 }
 
@@ -145,7 +140,7 @@ bool get_nocktime(Nocktime &t){
       int hour = data.substring(23,25).toInt(); //hour
       int minute = data.substring(26,28).toInt(); //minute
       int second = data.substring(29,31).toInt(); //second
-
+      
       int dayofmonth[] = {31,28,31,30,31,30,31,31,30,31,30,31};
       //년도가 4의 배수일때마다 2월이 29일까지다!
       //year % 4 == 0
