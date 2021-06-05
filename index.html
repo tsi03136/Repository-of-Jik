@@ -11,77 +11,8 @@
     <link rel="stylesheet" href="index.css" type="text/css">
     <title>current Weather</title>
     <style>
-        table,
-        th,
-        td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
 
-        th {
-            font-size: 10pt;
-        }
-
-        td {
-            width: 300px;
-            font-size: 8pt;
-        }
-
-        #head_container {
-            width: 100%;
-            text-align: center;
-            padding: 30px 0 10px 0;
-        }
-
-        #section_container {
-            width: 100%;
-            text-align: center;
-            padding: 10px 0 10px 0;
-        }
-
-        #footer_container {
-            width: 1000px;
-        }
-
-        #inside_section_container {
-            width: 1000px;
-            text-align: center;
-            margin: 0 auto;
-            padding: 0 0 0 auto;
-        }
-
-        #clock {
-            text-align: left;
-            padding: 0 0 0 270px;
-        }
-
-        #section_table_1>th {
-            width: 200px;
-        }
-
-        .level_Color_0 {
-            color: #00ff2a;
-        }
-
-        .level_Color_1 {
-            color: #fffb00;
-        }
-
-        .level_Color_2 {
-            color: #ff9100;
-        }
-
-        .level_Color_3 {
-            color: #ff3300;
-        }
-
-        .level_Color_4 {
-            color: #5c0303;
-        }
-
-        .level_Color_5 {
-            color: #000000;
-        }
+        
     </style>
 </head>
 
@@ -107,7 +38,7 @@
                 <hr />
                 <h1 id="clock" style="color:gray; cursor:default;">00:00</h1>
 
-                <table id="section_table_1" style="width: 500px;margin:0 auto;">
+                <table id="section_table_1">
                     <tr>
                         <th></th>
                         <th>공공데이터 측정값</th>
@@ -116,43 +47,207 @@
                     <tr>
                         <td>강수형태</td>
                         <td id='P1'></td>
-                        <td></td>
+                        <td id='Rain_Type_Arduino'></td>
                     </tr>
                     <tr>
                         <td>습도</td>
                         <td id='P2'></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>1시간 강수량</td>
-                        <td id='P3'></td>
-                        <td></td>
+                        <td id='Huminity_Arduino'></td>
                     </tr>
                     <tr>
                         <td>온도</td>
                         <td id='P4'></td>
-                        <td></td>
+                        <td id='Temperature_Arduino'></td>
                     </tr>
                     <tr>
                         <td>풍속</td>
                         <td id='P5'></td>
-                        <td></td>
+                        <td id='Wind_Speed_Arduino'></td>
                     </tr>
                     <tr>
                         <td>미세먼지</td>
                         <td id='P6'></td>
-                        <td></td>
+                        <td id='Air_Pollution_Arduino'></td>
                     </tr>
                 </table>
-                <div>
+                <div id='Compare_Rain_Type'>
+                    <span id="arduino_Rain_Type_Pos"
+                        style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
+                    <span style="font-size : 8px; position : relative; left:21%; top :20px">←공공데이터</span>
+
+                    <table id="section_table_1" style="width: 400px;margin:0 auto;">
+                        <tr>
+                            <th colspan="2" style="width:18%">강수형태 등급</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="level_Color_0">비 안내림</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="level_Color_1">비</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_2">소나기</td>
+                            <td style=" border : 0"></td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_3">빗방울</td>
+                            <td frameborder = "0" style=" border : 0"></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_4">약한 진눈깨비</td>
+                            <td style="border : 0"></td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_5">눈날림</td>
+                            <td style="border : 0"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id='Compare_Huminity'>
                     <span id="arduino_WInd_Pos"
                         style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
                     <span style="font-size : 8px; position : relative; left:21%; top :20px">←공공데이터</span>
 
                     <table id="section_table_1" style="width: 400px;margin:0 auto;">
                         <tr>
-                            <th style="width:20%">단위 (m/s)</th>
-                            <th style="width:18%">바람 세기 기준치</th>
+                            <th style="width:20%">등급</th>
+                            <th style="width:18%">바람 세기(m/s)</th>
+                            <th style="width:62%">해설</th>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_0">0등급</tㅇ>
+                            <td>0~0.2</td>
+                            <td>연기가 위로 똑바르게 올라가는 상태<p></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_1">1등급</td>
+                            <td>0.3~1.5</td>
+                            <td>연기가 날리는 것은 알 수 있으나, 바람개비로는 감지 불가</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_2">2등급</td>
+                            <td>1.6~3.3</td>
+                            <td>얼굴로 바람이 느껴지고 나뭇잎이 흔들리고 바람개비로 감지 가능</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_3">3등급</td>
+                            <td>3.4~5.4</td>
+                            <td>나뭇잎과 가는 가지가 쉴새 없이 흔들림<p></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_4">4등급</td>
+                            <td>5.5~7.9</td>
+                            <td>먼지가 일고 종이 조각이 날리며 작은 나뭇가지가 흔들리는 정도</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_5">5등급</td>
+                            <td>8~10.7</td>
+                            <td>잎이 무성한 작은 나무 전체가 흔들리고 강물에 잔물결이 일어남</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id='Compare_Temperature'>
+                    <span id="arduino_WInd_Pos"
+                        style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
+                    <span style="font-size : 8px; position : relative; left:21%; top :20px">←공공데이터</span>
+
+                    <table id="section_table_1" style="width: 400px;margin:0 auto;">
+                        <tr>
+                            <th style="width:20%">등급</th>
+                            <th style="width:18%">바람 세기(m/s)</th>
+                            <th style="width:62%">해설</th>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_0">0등급</tㅇ>
+                            <td>0~0.2</td>
+                            <td>연기가 위로 똑바르게 올라가는 상태<p></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_1">1등급</td>
+                            <td>0.3~1.5</td>
+                            <td>연기가 날리는 것은 알 수 있으나, 바람개비로는 감지 불가</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_2">2등급</td>
+                            <td>1.6~3.3</td>
+                            <td>얼굴로 바람이 느껴지고 나뭇잎이 흔들리고 바람개비로 감지 가능</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_3">3등급</td>
+                            <td>3.4~5.4</td>
+                            <td>나뭇잎과 가는 가지가 쉴새 없이 흔들림<p></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_4">4등급</td>
+                            <td>5.5~7.9</td>
+                            <td>먼지가 일고 종이 조각이 날리며 작은 나뭇가지가 흔들리는 정도</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_5">5등급</td>
+                            <td>8~10.7</td>
+                            <td>잎이 무성한 작은 나무 전체가 흔들리고 강물에 잔물결이 일어남</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id='Compare_Wind_Speed'>
+                    <span id="arduino_WInd_Pos"
+                        style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
+                    <span style="font-size : 8px; position : relative; left:21%; top :20px">←공공데이터</span>
+
+                    <table id="section_table_1" style="width: 400px;margin:0 auto;">
+                        <tr>
+                            <th style="width:20%">등급</th>
+                            <th style="width:18%">바람 세기(m/s)</th>
+                            <th style="width:62%">해설</th>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_0">0등급</tㅇ>
+                            <td>0~0.2</td>
+                            <td>연기가 위로 똑바르게 올라가는 상태<p></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_1">1등급</td>
+                            <td>0.3~1.5</td>
+                            <td>연기가 날리는 것은 알 수 있으나, 바람개비로는 감지 불가</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_2">2등급</td>
+                            <td>1.6~3.3</td>
+                            <td>얼굴로 바람이 느껴지고 나뭇잎이 흔들리고 바람개비로 감지 가능</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_3">3등급</td>
+                            <td>3.4~5.4</td>
+                            <td>나뭇잎과 가는 가지가 쉴새 없이 흔들림<p></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_4">4등급</td>
+                            <td>5.5~7.9</td>
+                            <td>먼지가 일고 종이 조각이 날리며 작은 나뭇가지가 흔들리는 정도</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_5">5등급</td>
+                            <td>8~10.7</td>
+                            <td>잎이 무성한 작은 나무 전체가 흔들리고 강물에 잔물결이 일어남</td>
+                        </tr>
+                    </table>
+                </div>
+                <div id='Compare_Air_Pollution'>
+                    <span id="arduino_WInd_Pos"
+                        style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
+                    <span style="font-size : 8px; position : relative; left:21%; top :20px">←공공데이터</span>
+
+                    <table id="section_table_1" style="width: 400px;margin:0 auto;">
+                        <tr>
+                            <th style="width:20%">등급</th>
+                            <th style="width:18%">바람 세기(m/s)</th>
                             <th style="width:62%">해설</th>
                         </tr>
                         <tr>
@@ -241,7 +336,6 @@
                 console.log("기상 데이터 불러오기 실패\n");
             }
         }
-
 
         function currentWeather(obj) {
             const item = obj.response.body.items.item;
