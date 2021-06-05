@@ -32,7 +32,6 @@ String hm;
 
 int api_air_pol; 
 int api_temp; 
-int api_humi;
 int api_rain; 
 int api_wind;
 
@@ -277,7 +276,6 @@ void call_weather(){
     }
   }
   api_temp = wfEn30.toInt(); 
-  api_humi = wfEn40.toInt(); 
   api_rain = wfEn60.toInt(); 
   api_wind = wfEn80.toInt();
 
@@ -393,17 +391,12 @@ void connect_Wifi() {
     JsonObject& root = jsonBuffer.createObject();
     JsonObject& response = root.createNestedObject("response");
     JsonObject& body = response.createNestedObject("body");
-    JsonObject& item = body.createNestedObject("item");
-    JsonObject& items = item.createNestedObject("items");
-    items["Air_Pollution_1.0"] = ALL_Sensor_Value[0];
-    items["Air_Pollution_2.5"] = ALL_Sensor_Value[1];
-    items["Air_Pollution_10.0"] = ALL_Sensor_Value[2];
-    items["Wind_Speed"] = ALL_Sensor_Value[6];
-    items["Temperature"] = ALL_Sensor_Value[3];
-    items["Humidity"] = ALL_Sensor_Value[4];
-    items["Rain_Check"] = ALL_Sensor_Value[5];
-    //Serial.println();
-    //Serial.println("New client");
+    JsonObject& items = body.createNestedObject("items");
+    JsonObject& item = items.createNestedObject("item");
+    item["AirPollution10"] = ALL_Sensor_Value[2];
+    item["WindSpeed"] = ALL_Sensor_Value[6];
+    item["Temperature"] = ALL_Sensor_Value[3];
+    item["Rain_Check"] = ALL_Sensor_Value[5];
     // bolean to locate when the http request ends
     boolean blank_line = true;
     while (client.connected()) {
@@ -488,6 +481,7 @@ void air_pol() {
 
 //빗물센서--------------------------------------------------------------------------------------
 void rain() {
+  //[0 : 빗물 미감지, 1 : 빗물 감지]
   ALL_Sensor_Value[5] = digitalRead(Rain_Sensor);
 }
 
@@ -580,14 +574,16 @@ void api_compare(){
   ALL_Sensor_Value[1] > api_air_pol ? worst_air_pol = ALL_Sensor_Value[1] : worst_air_pol = api_air_pol;
   //온도
   if(ALL_Sensor_Value[3] >=30 || api_temp >= 30)
-    worst_temp = 1;
+    worst_temp = 0; //온도 높아서 창문 열기
   else if(ALL_Sensor_Value[3] <=17 || api_temp <= 17)
-    worst_temp = 1;
+    worst_temp = 1; //온도 낮아서 창문 닫기
   else
-    worst_temp = 0;
-  //빗물
-  if(ALL_Sensor_Value[5] == 1 || api_rain == 1) 
-    worst_rain = 1;
+    worst_temp = 2; //온도는 정상
+  //빗물 
+  if(ALL_Sensor_Value[5] == 1 || api_rain > 0) 
+    worst_rain = 1; //비 감지
+  else
+    worst_rain = 0; //비 감지 불가
   //풍속
   (ALL_Sensor_Value[6] > api_wind) ? worst_wind = ALL_Sensor_Value[6] : worst_wind = api_wind;
 }
@@ -595,10 +591,10 @@ void api_compare(){
 void print_worst(){
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
-  root["worst_air_pol"] = worst_air_pol;
-  root["worst_temp"] = worst_temp;
-  root["worst_rain"] = worst_rain;
-  root["worst_wind"] = worst_wind;
+  root["WorstairPol"] = worst_air_pol;
+  root["WorstTemp"] = worst_temp;
+  root["WorstRain"] = worst_rain;
+  root["WorstWind"] = worst_wind;
   root.printTo(Serial);
 }
 //********************************SETUP()****************************************************************
@@ -646,5 +642,13 @@ void loop(){
   call_weather(); //날씨 api 데이터 얻기
   api_compare(); //센서와 api 데이터 비교 후 최악 데이터 출력
   print_worst(); //Json형식으로 wosrt값을 serial에 출력
+  //센서값 관리 0: 미세먼지1.0, 1: 미세먼지2.5, 2: 미세먼지10.0, 3: 온도
+  //4: 습도, 5. 빗물, 6. 풍속
+  Serial.println((String)"\n아두이노 센서 미세먼지10 : "+ALL_Sensor_Value[2]+
+  (String)", 온도 : "+ALL_Sensor_Value[3]+(String)", 빗물 체크 : "+ALL_Sensor_Value[5]
+  +(String)", 풍속 : "+ALL_Sensor_Value[6]);
+  Serial.println((String)"API 센서 미세먼지10 : "+api_air_pol+
+  (String)", 온도 : "+api_temp+(String)", 빗물 체크 : "+api_rain
+  +(String)", 풍속 : "+api_wind);
   delay(3000);
 }
