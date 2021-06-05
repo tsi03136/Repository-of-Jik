@@ -1,6 +1,7 @@
 //센서값 Json화
 #include <ArduinoJson.h>
 #include <ezTask.h>
+
 //Wifi----------------------------------------------------------------
 #include <ESP8266WiFi.h>
 const char* ssid = "AndroidHotspot2383";
@@ -37,20 +38,16 @@ String wfEn80;
 
 //api,센서 비교 변수
 
-int worst_pm2_5;
-int worst_temp;
-int worst_humi;
-int worst_rain;
-int worst_wsd;
-
-
-
+int worst_pm2_5; //최악 미세먼지
+int worst_temp; //최악 온도
+int worst_humi; //최악 습도
+int worst_rain; //최악 빗물
+int worst_wisd; //최악 바람
 
 int window_state = 0; //0 자동 1 수동
 
 //빗물----------------------------------------------------------------
 int Rain_Sensor = D7;
-
 
 //미세----------------------------------------------------------------
 #include <SoftwareSerial.h>
@@ -146,8 +143,8 @@ void setup() {
   pinMode(Limit_butten2, INPUT_PULLUP);
   pinMode(control_butten, INPUT_PULLUP);
 }
-//api 미세먼지-----------------------------------------------------------
 
+//api 미세먼지-----------------------------------------------------------
 void call_air_pol(){
   delay(5000);
  int i=0;
@@ -604,14 +601,14 @@ void loop() {
   connect_Wifi();
   
   //Run Time
-Nocktime nt;
+  Nocktime nt;
   String st_hour;
   String st_minute;
   String st_year;
   String st_month;
   String st_day;
   String st_second;
-
+  
   
   if(get_nocktime(nt)){
     st_year = (String)nt.year;
