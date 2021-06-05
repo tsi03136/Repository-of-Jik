@@ -8,20 +8,13 @@ const char* host = "apis.data.go.kr";
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  delay(10);
-  Serial.println("setup() START");
- 
-  // We start by connecting to a WiFi network
- 
-  Serial.println();
-  Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
   
   WiFi.begin(ssid, password);
   
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    delay(1000);
     Serial.print(".");
   }
  
@@ -29,7 +22,6 @@ void setup() {
   Serial.println("WiFi connected");  
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-
 }
 
 ezTask task1(1000,[](){
