@@ -170,7 +170,7 @@ void wind_freq() {
   a = analogRead(0);
 
   Serial.print("A0 : ");
-  Serial.println(a);
+  Serial.println(a); 
   float b = 0;
   b = a / 1023.0 * 5.0;     //아두이노는 10bit ADC므로 0~1023로 표시되므로 0~5범위로 매핑합니다.
 
