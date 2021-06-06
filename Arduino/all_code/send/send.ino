@@ -2,8 +2,8 @@
 
 //Wifi------------------------------------------------------------------
 #include <ESP8266WiFi.h>
-const char* ssid = "AndroidHotspot2383";
-const char* password = "11111111";
+const char* ssid = "Dain_Gongbang";
+const char* password = "rladlstns1808";
 WiFiServer server(80);
 
 //API------------------------------------------------------------------
@@ -119,23 +119,12 @@ void call_air_pol(){
   unsigned long timeout = millis();
   while (client.available() == 0) {
     if (millis() - timeout > 5000) {
-      Serial.println(">>> Client Timeout !");
+      Serial.println(">>> 미세먼지 api call Client Timeout !");
       client.stop();
       return;
     }
   }
-  // This will send the request to the server
-  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
-     "Host: " + host + "\r\n" + 
-     "Connection: close\r\n\r\n");
   
-  while (client.available() == 0) {
-    if (millis() - timeout > 5000) {
-      Serial.println(">>> Client Timeout !");
-      client.stop();
-      return;
-    }
-  }
   // Read all the lines of the reply from server and print them to Serial
     while(client.available()){
     String line = client.readStringUntil('\r');
@@ -203,7 +192,7 @@ void call_weather(){
   unsigned long timeout = millis();
   while (client.available() == 0) {
     if (millis() - timeout > 5000) {
-      Serial.println(">>> Client Timeout !");
+      Serial.println(">>> weather call Client Timeout !");
       client.stop();
       return;
     }
@@ -252,7 +241,7 @@ void call_weather(){
       wfEn50 = line.substring(line.indexOf(tmp_str)+tmp_str.length(),i);
       //Serial.println(wfEn20); 
       
-      j=wfEn50.indexOf("</obsrValue>"); 
+      j = wfEn50.indexOf("</obsrValue>"); 
       if(j>0) {
         tmp_str1 = "<obsrValue>";
         wfEn60 = wfEn50.substring(wfEn50.indexOf(tmp_str1)+tmp_str1.length(),j);
@@ -390,28 +379,28 @@ void connect_Wifi() {
     StaticJsonBuffer<400> jsonBuffer;
     JsonObject& root = jsonBuffer.createObject();
     JsonObject& response = root.createNestedObject("response");
-    JsonObject& body = response.createNestedObject("body");
-    JsonObject& items = body.createNestedObject("items");
-    JsonObject& item = items.createNestedObject("item");
-    item["AirPollution10"] = ALL_Sensor_Value[2];
-    item["WindSpeed"] = ALL_Sensor_Value[6];
-    item["Temperature"] = ALL_Sensor_Value[3];
-    item["Rain_Check"] = ALL_Sensor_Value[5];
+    //JsonObject& body = response.createNestedObject("body");
+    //JsonObject& items = body.createNestedObject("items");
+    //JsonObject& item = items.createNestedObject("item");
+    response["AirPollution10"] = ALL_Sensor_Value[2];
+    response["WindSpeed"] = ALL_Sensor_Value[6];
+    response["Temperature"] = ALL_Sensor_Value[3];
+    response["RainCheck"] = ALL_Sensor_Value[5];
     // bolean to locate when the http request ends
     boolean blank_line = true;
     while (client.connected()) {
       if (client.available()) {
-        char c = client.read();
+        char c = client.read(); 
         if (c == '\n' && blank_line) {
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
           client.println("Connection: close");
           client.println();
-          client.println("<!DOCTYPE HTML>");
           client.println("<html>");
           client.println("<head></head><body>");
+          client.println("<pre style=\"word-wrap: break-word; white-space: pre-wrap;\">");
           root.printTo(client); //테스트 완료 : 문제 없음
-          client.println("</body></html>");
+          client.println("</pre></body></html>");
           break;
         }
         if (c == '\n') {
@@ -480,8 +469,9 @@ void air_pol() {
 
 //빗물센서--------------------------------------------------------------------------------------
 void rain() {
-  //[0 : 빗물 미감지, 1 : 빗물 감지]
-  ALL_Sensor_Value[5] = digitalRead(Rain_Sensor);
+  //정상 센서 검출 시 [1 : 빗물 미감지, 0 : 빗물 감지]
+  //하지만 직관성을 위해서 [0 : 빗물 미감지, 1 : 빗물 감지]
+  digitalRead(Rain_Sensor) == 1 ? ALL_Sensor_Value[5] = 0 : ALL_Sensor_Value[5] = 1;
 }
 
 //베이스시간, 베이스데이트 생성--------------------------------------------------------------------
@@ -576,13 +566,15 @@ void api_compare(){
   else
     worst_air_pol = 0;
   //온도------------------------------------------------------
-  if(ALL_Sensor_Value[3] >=30 || api_temp >= 30)
-    worst_temp = 0; //온도 높아서 창문 열기
-  else if(ALL_Sensor_Value[3] <=17 || api_temp <= 17)
+  if(ALL_Sensor_Value[3] <=17 || api_temp <= 17)
     worst_temp = 1; //온도 낮아서 창문 닫기
+  else
+    worst_temp = 0; //온도 높아서 창문 열기
+  
+    
   
   //빗물----------------------------------------------------------
-  if(ALL_Sensor_Value[5] == 0 || api_rain > 0) 
+  if(ALL_Sensor_Value[5] > 0 || api_rain > 0) 
     worst_rain = 1; //비 감지
   else
     worst_rain = 0; //비 감지 불가
@@ -658,7 +650,7 @@ void loop(){
   api_compare(); //센서와 api 데이터 비교 후 최악 데이터 출력
 
   //최악 값을 json화한 후 다른 보드로 전달 함수
-  print_worst(); //Json형식으로 wosrt값을 serial에 출력
+  print_worst(); //Json형식으로 worst값을 serial에 출력
   
   //센서값 관리 0: 미세먼지1.0, 1: 미세먼지2.5, 2: 미세먼지10.0, 3: 온도
   //4: 습도, 5. 빗물, 6. 풍속
@@ -668,5 +660,5 @@ void loop(){
   Serial.println((String)"API 센서 미세먼지10 : "+api_air_pol+
   (String)", 온도 : "+api_temp+(String)", 빗물 체크 : "+api_rain
   +(String)", 풍속 : "+api_wind);
-  delay(3000);
+  delay(1000);
 }
