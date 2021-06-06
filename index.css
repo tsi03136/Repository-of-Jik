@@ -10,7 +10,6 @@ body {
 }
 
 .container {
-  display: block;
   max-width:300px;
   display: inline-block;
 }
@@ -130,12 +129,15 @@ h1{
   }
 
   #inside_section_container {
-      width: 1000px;
+      width: 1300px;
       text-align: center;
       margin: 0 auto;
       padding: 0 0 0 auto;
   }
-
+  #inside_section_container_only_table{
+    width : 100%;
+    display : inline-block;
+  }
   #clock {
       text-align: left;
       padding: 0 0 0 270px;
@@ -143,6 +145,14 @@ h1{
 
   #section_table_1>th {
       width: 200px;
+  }
+
+  #Title{
+    
+  }
+  .section_container_inside_table{
+    width : 1000px;
+    text-align : center;
   }
 
   .level_Color_0 {
@@ -168,3 +178,4 @@ h1{
   .level_Color_5 {
       color: #000000;
   }
+

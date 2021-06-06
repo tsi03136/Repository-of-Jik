@@ -12,13 +12,13 @@
     <title>current Weather</title>
     <style>
 
-        
+
     </style>
 </head>
 
 <body>
     <header id="head_container">
-        <div style="width:1000px; text-align: center; margin:0 auto;">
+        <div style="width:1000px; margin-left: auto; margin-right: auto;">
             <div class="container">
                 <h1>
                     <span class="title">아두이노 센서</span>
@@ -28,50 +28,52 @@
             </div>
         </div>
     </header>
-    <section>
-        <div id="section_container">
-            <div id="inside_section_container">
-                <div class="button">데이터 불러오기</div>
-                <span class="reload_weather"></span>
-                <br>
-                <span class="reload_Air_Pollution"></span>
-                <br>
-                <span class="reload_Arduino"></span>
-                <hr />
-                <h1 id="clock" style="color:gray; cursor:default;">00:00</h1>
+    <section id="section_container">
+        <div class="section_container_inside_table" style= " width : 1000px; text-align : center;">
+            <div class="button">데이터 불러오기</div>
+            <span class="reload_weather"></span>
+            <br>
+            <span class="reload_Air_Pollution"></span>
+            <br>
+            <span class="reload_Arduino"></span>
+            <hr />
+            <br>
+            <h1 id="clock" style="color:gray; cursor:default;">00:00</h1><br>
 
-                <table id="section_table_1"  style="width: 400px;margin:0 auto;"">
-                    <tr>
-                        <th></th>
-                        <th>공공데이터 측정값</th>
-                        <th>아두이노 센서 측정값</th>
-                    </tr>
-                    <tr>
-                        <td>강수형태</td>
-                        <td id='P1'></td>
-                        <td id='Rain_Type_Arduino'></td>
-                    </tr>
-                    <tr>
-                        <td>온도</td>
-                        <td id='P4'></td>
-                        <td id='Temperature_Arduino'></td>
-                    </tr>
-                    <tr>
-                        <td>풍속</td>
-                        <td id='P5'></td>
-                        <td id='Wind_Speed_Arduino'></td>
-                    </tr>
-                    <tr>
-                        <td>미세먼지</td>
-                        <td id='P6'></td>
-                        <td id='Air_Pollution_Arduino'></td>
-                    </tr>
-                </table>
+            <table id="section_table_1" style="width: 400px;margin:0 auto;"">
+                <tr>
+                    <th></th>
+                    <th>공공데이터 측정값</th>
+                    <th>아두이노 센서 측정값</th>
+                </tr>
+                <tr>
+                    <td>강수형태</td>
+                    <td id='P1'></td>
+                    <td id='Rain_Type_Arduino'></td>
+                </tr>
+                <tr>
+                    <td>온도</td>
+                    <td id='P4'></td>
+                    <td id='Temperature_Arduino'></td>
+                </tr>
+                <tr>
+                    <td>풍속</td>
+                    <td id='P5'></td>
+                    <td id='Wind_Speed_Arduino'></td>
+                </tr>
+                <tr>
+                    <td>미세먼지</td>
+                    <td id='P6'></td>
+                    <td id='Air_Pollution_Arduino'></td>
+                </tr>
+            </table>
+        </div>
+        <div id=" inside_section_container_only_table">
+                <!-----------------------------------------강우 상태 테이블----------------------------------------->
                 <div id='Compare_Rain_Type'>
-                    <span id="arduino_Rain_Type_Pos"
+                    <span id=" arduino_Rain_Type_Pos"
                         style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
                     <span style="font-size : 8px; position : relative; left:21%; top :20px">←공공데이터</span>
-
                     <table id="section_table_1" style="width: 400px;margin:0 auto; border : rgba(255, 0, 0, .5)">
                         <tr>
                             <th colspan="2" style="width:18%">강수형태 등급</th>
@@ -101,7 +103,7 @@
                         </tr>
                     </table>
                 </div>
-                
+                <!-----------------------------------------온도 테이블----------------------------------------->
                 <div id='Compare_Temperature'>
                     <span id="arduinoTemp_Pos"
                         style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
@@ -116,7 +118,8 @@
                         <tr>
                             <td class="level_Color_4">저온 4등급</tㅇ>
                             <td></td>
-                            <td><p></p>
+                            <td>
+                                <p></p>
                             </td>
                         </tr>
                         <tr>
@@ -132,7 +135,8 @@
                         <tr>
                             <td class="level_Color_1">저온 1등급</td>
                             <td></td>
-                            <td><p></p>
+                            <td>
+                                <p></p>
                             </td>
                         </tr>
                         <tr>
@@ -162,6 +166,8 @@
                         </tr>
                     </table>
                 </div>
+
+                <!-----------------------------------------풍속 테이블----------------------------------------->
                 <div id='Compare_Wind_Speed'>
                     <span id="arduino_WInd_Pos"
                         style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
@@ -207,6 +213,8 @@
                         </tr>
                     </table>
                 </div>
+
+                <!-----------------------------------------미세먼지 테이블----------------------------------------->
                 <div id='Compare_Air_Pollution'>
                     <span id="arduino_Air_Pos"
                         style="font-size : 8px; position : relative; right: 20%; top :20px">아두이노→</span>
@@ -215,44 +223,34 @@
                     <table id="section_table_1" style="width: 400px;margin:0 auto;">
                         <tr>
                             <th style="width:11%">등급</th>
-                            <th style="width:27%; font-size : 6px">미세먼지 농도(㎍/㎥)<br>미세먼지 크기(2.5pm)</th>
+                            <th style="width:27%; font-size : 6px">미세먼지 농도(㎍/㎥)<br>미세먼지 크기(10pm)</th>
                             <th style="width:62%">해설</th>
                         </tr>
                         <tr>
-                            <td class="level_Color_0">0등급</tㅇ>
-                            <td>0~0.2</td>
-                            <td>연기가 위로 똑바르게 올라가는 상태<p></p>
+                            <td class="level_Color_0">0등급 (좋음)</tㅇ>
+                            <td>0 ~ 30</td>
+                            <td>푸르고 화창한 날씨</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_1">1등급 (보통)</td>
+                            <td>31 ~ 80</td>
+                            <td>민감군 : 실외활동 시 특별히 행동에 제약을 받을 필요는 없지만 몸 상태에 따라 유의하여 활동</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_2">2등급 (나쁨)</td>
+                            <td>81 ~ 150</td>
+                            <td>민감군 : 장시간, 무리한 실외활동 제한, 특히 천식을 앓고 있는 사람이 실외에 있는 경우 흡입기를 더 자주 사용할 필요가 있음<br>
+                                일반인 : 장시간, 무리한 실외활동 제한, 특히 눈과 목이 불편한 사람은 실외활동 추천하지 않음</td>
+                        </tr>
+                        <tr>
+                            <td class="level_Color_3">3등급 (매우나쁨)</td>
+                            <td>151 ~ </td>
+                            <td>민감군 : 가급적 실내활동, 실외활동 시 의사와 상의<br>
+                                일반인 : 장시간, 무리한 실외활동 제한, 목의 통증과, 기침 등의 증상이 있다면 실외활동 피할 것<p></p>
                             </td>
-                        </tr>
-                        <tr>
-                            <td class="level_Color_1">1등급</td>
-                            <td>0.3~1.5</td>
-                            <td>연기가 날리는 것은 알 수 있으나, 바람개비로는 감지 불가</td>
-                        </tr>
-                        <tr>
-                            <td class="level_Color_2">2등급</td>
-                            <td>1.6~3.3</td>
-                            <td>얼굴로 바람이 느껴지고 나뭇잎이 흔들리고 바람개비로 감지 가능</td>
-                        </tr>
-                        <tr>
-                            <td class="level_Color_3">3등급</td>
-                            <td>3.4~5.4</td>
-                            <td>나뭇잎과 가는 가지가 쉴새 없이 흔들림<p></p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="level_Color_4">4등급</td>
-                            <td>5.5~7.9</td>
-                            <td>먼지가 일고 종이 조각이 날리며 작은 나뭇가지가 흔들리는 정도</td>
-                        </tr>
-                        <tr>
-                            <td class="level_Color_5">5등급</td>
-                            <td>8~10.7</td>
-                            <td>잎이 무성한 작은 나무 전체가 흔들리고 강물에 잔물결이 일어남</td>
                         </tr>
                     </table>
                 </div>
-            </div>
         </div>
     </section>
     <footer>
@@ -274,7 +272,7 @@
         const myPara4 = document.getElementById('P4');
         const myPara5 = document.getElementById('P5');
         const myPara6 = document.getElementById('P6');
-        
+
         const Para_Rain_Type_Arduino = document.getElementById('Rain_Type_Arduino');
         const Para_Temperature_Arduino = document.getElementById('Temperature_Arduino');
         const Para_Wind_Speed_Arduino = document.getElementById('Wind_Speed_Arduino');
@@ -427,7 +425,7 @@
             const item = obj.response.body.items.item;
             const cat = item[i].category;
             Para_Rain_Type_Arduino.innerHTML = item.AirPollution25;
-            Para_Temperature_Arduino.innerHTML = item.WindSpeed; 
+            Para_Temperature_Arduino.innerHTML = item.WindSpeed;
             Para_Wind_Speed_Arduino.innerHTML = item.Temperature;
             Para_Air_Pollution_Arduino.innerHTML = item.RainCheck;
         }
