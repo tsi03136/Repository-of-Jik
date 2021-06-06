@@ -1,3 +1,4 @@
+/*
 void run_motor(){
   if (digitalRead(control_butten) == 0) {
     window_state = 0;
@@ -26,7 +27,7 @@ void run_motor(){
         }
 }
 
-      /*
+      
       else if (ALL_Sensor_Value[3] <= 16) {
         digitalWrite(motorIA, HIGH);
         digitalWrite(motorIB, LOW);
@@ -35,7 +36,7 @@ void run_motor(){
           digitalWrite(motorIB, LOW);
         }
       }
-      */
+      
       else { //모든조건충족하여 창문열기
         digitalWrite(motorIA, LOW);
         digitalWrite(motorIB, HIGH);
@@ -78,7 +79,7 @@ void run_motor(){
     digitalWrite(motorIB, LOW);
   }
 }
-
+*/
 void setup(){
   Serial.begin(115200);
 }
@@ -91,7 +92,7 @@ void loop(){
     //data 파싱 후 데이터를 바탕으로 모터 조작하여 창문 작동시키는 코드 작성할 것
     //에러 상황에 대처할 것
     //미세먼지 크기 10pm으로 수정
-    run_motor();
+    //run_motor();
     
   }  
 }

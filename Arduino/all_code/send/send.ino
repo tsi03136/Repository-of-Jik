@@ -2,8 +2,8 @@
 
 //Wifi------------------------------------------------------------------
 #include <ESP8266WiFi.h>
-const char* ssid = "KT_GiGA_CC42";
-const char* password = "9bf42bg857";
+const char* ssid = "AndroidHotspot2383";
+const char* password = "11111111";
 WiFiServer server(80);
 
 //API------------------------------------------------------------------
@@ -33,7 +33,7 @@ String hm;
 int api_air_pol; 
 int api_temp; 
 int api_rain; 
-int api_wind;
+float api_wind;
 
 String wfEn25;
 String wfEn30;
@@ -277,7 +277,7 @@ void call_weather(){
   }
   api_temp = wfEn30.toInt(); 
   api_rain = wfEn60.toInt(); 
-  api_wind = wfEn80.toInt();
+  api_wind = wfEn80.toFloat();
 
   Serial.println();
   //Serial.println("closing connection");
@@ -424,7 +424,6 @@ void connect_Wifi() {
         }
       }
     }
-    delay(1000);
     client.stop();
     //Serial.println("Client disconnected.");
   }
@@ -571,21 +570,28 @@ void api_compare(){
   //센서값 관리 0: 미세먼지1.0, 1: 미세먼지2.5, 2: 미세먼지10.0, 3: 온도
   //4: 습도, 5. 빗물, 6. 풍속
   //미세먼지
-  ALL_Sensor_Value[1] > api_air_pol ? worst_air_pol = ALL_Sensor_Value[1] : worst_air_pol = api_air_pol;
-  //온도
+  //테스트 환경을 위해 임의로 미세먼지로 인한 작동 기준치를 실내 55, 외부 100으로 설정
+  if(ALL_Sensor_Value[2] >=55 || api_air_pol >=100) 
+    worst_air_pol = 1; //미세먼지 기준치 이상 감지
+  else
+    worst_air_pol = 0;
+  //온도------------------------------------------------------
   if(ALL_Sensor_Value[3] >=30 || api_temp >= 30)
     worst_temp = 0; //온도 높아서 창문 열기
   else if(ALL_Sensor_Value[3] <=17 || api_temp <= 17)
     worst_temp = 1; //온도 낮아서 창문 닫기
-  else
-    worst_temp = 2; //온도는 정상
-  //빗물 
-  if(ALL_Sensor_Value[5] == 1 || api_rain > 0) 
+  
+  //빗물----------------------------------------------------------
+  if(ALL_Sensor_Value[5] == 0 || api_rain > 0) 
     worst_rain = 1; //비 감지
   else
     worst_rain = 0; //비 감지 불가
-  //풍속
-  (ALL_Sensor_Value[6] > api_wind) ? worst_wind = ALL_Sensor_Value[6] : worst_wind = api_wind;
+  
+  //풍속----------------------------------------------------------
+  if(ALL_Sensor_Value[6] >= 5 || api_wind >= 5)
+    worst_wind = 1; //강풍 검출
+  else 
+    worst_wind = 0; //강풍 미검출
 }
 
 void print_worst(){
@@ -632,16 +638,28 @@ void setup(){
 }
 
 void loop(){
+  //센서 함수
   wind_freq(); //아두이노 바람 센서 측정
   F_dht(); //아두이노 습도, 온도 측정
   air_pol(); //아두이노 미세먼지 측정
   rain(); //아두이노 빗물 센서 디지털 측정
+
+  //클라이언트 접속 함수
   connect_Wifi(); //web에 아두이노 센서값 Json으로 출력
+
+  //API 베이스타임, 베이스데이트 생성 함수
   get_basedate_time(); //nocktime과 ymd, hm 얻기
+
+  //API 호출 함수
   call_air_pol(); //미세먼지 api 데이터 얻기
   call_weather(); //날씨 api 데이터 얻기
+
+  //API랑 센서값 중 최악 선택
   api_compare(); //센서와 api 데이터 비교 후 최악 데이터 출력
+
+  //최악 값을 json화한 후 다른 보드로 전달 함수
   print_worst(); //Json형식으로 wosrt값을 serial에 출력
+  
   //센서값 관리 0: 미세먼지1.0, 1: 미세먼지2.5, 2: 미세먼지10.0, 3: 온도
   //4: 습도, 5. 빗물, 6. 풍속
   Serial.println((String)"\n아두이노 센서 미세먼지10 : "+ALL_Sensor_Value[2]+
