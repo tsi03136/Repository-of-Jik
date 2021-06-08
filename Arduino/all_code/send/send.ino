@@ -145,7 +145,7 @@ void call_air_pol(){
       //Serial.println(wfEn25);
     }
   }
-  api_air_pol = wfEn25.toInt(); 
+  api_air_pol = wfEn10.toInt(); 
   //Serial.println();
   //Serial.println("closing connection");
   //Serial.println("PM 10 : "+wfEn10); 
@@ -580,7 +580,7 @@ void api_compare(){
     worst_rain = 0; //비 감지 불가
   
   //풍속----------------------------------------------------------
-  if(ALL_Sensor_Value[6] >= 5 || api_wind >= 5)
+  if(ALL_Sensor_Value[6] >= 2 || api_wind >= 5)
     worst_wind = 1; //강풍 검출
   else 
     worst_wind = 0; //강풍 미검출
