@@ -565,13 +565,12 @@ void api_compare(){
     worst_air_pol = 1; //미세먼지 기준치 이상 감지
   else
     worst_air_pol = 0;
+    
   //온도------------------------------------------------------
   if(ALL_Sensor_Value[3] <=17 || api_temp <= 17)
     worst_temp = 1; //온도 낮아서 창문 닫기
   else
     worst_temp = 0; //온도 높아서 창문 열기
-  
-    
   
   //빗물----------------------------------------------------------
   if(ALL_Sensor_Value[5] > 0 || api_rain > 0) 
