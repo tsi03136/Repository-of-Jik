@@ -1,5 +1,5 @@
 <?php
-    $url = 'http://192.168.0.16/';
+    $url = 'http://192.168.48.129';
     $ch = curl_init();
     
     curl_setopt($ch, CURLOPT_URL, $url);

@@ -2,8 +2,8 @@
 
 //Wifi------------------------------------------------------------------
 #include <ESP8266WiFi.h>
-const char* ssid = "Dain_Gongbang";
-const char* password = "rladlstns1808";
+const char* ssid = "AndroidHotspot2383";
+const char* password = "11111111";
 WiFiServer server(80);
 
 //API------------------------------------------------------------------
