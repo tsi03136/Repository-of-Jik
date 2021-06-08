@@ -362,15 +362,21 @@
 
         const xhr3 = new XMLHttpRequest();
         function get_Arduino() {
-            console.log(" get_Arduino() 시작\n");
             xhr3.open("GET", "get_Arduino.php");
             xhr3.send();
+            $('.reload_Arduino').text('아두이노 데이터 로딩중...');
+            $(".reload_Arduino").lettering();
+            console_clock();
+            console.log("run xhr3.open & xhr3.send \n");
         }
         xhr3.onload = function () {
+            $('.reload_Arduino').text('아두이노 데이터 로딩 완료');
+            $(".reload_Arduino").lettering();
             console_clock();
             console.log("xhr3.onload readyState =" + xhr3.readyState + ", status =" + xhr3.status + "\n");
             if (xhr3.readyState == 4 && xhr3.status == 200) {
                 let Arduino = xhr3.response;
+                console.log(Arduino);
                 let Arduino_Parsed_Data = JSON.parse(Arduino);
                 console.log("Arduino Sensor Data after parsed : " + Arduino);
                 current_Arduino(Arduino_Parsed_Data);
@@ -387,11 +393,11 @@
             Para_Air_Pollution_Arduino.innerHTML = item.AirPollution10+"㎍/㎥";
             var base_px_value = 30;
             var add_px_value = 55;
-            if (pm10Value <= 30) 
+            if (item.AirPollution10 <= 30) 
                 $('#arduino_Air_Pos').css({ "position": "relative", "top": + base_px_value + "px" });
-            else if (pm10Value <= 80) 
+            else if (item.AirPollution10 <= 80) 
                 $('#arduino_Air_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 1 + "px" });
-            else if (pm10Value <= 150) 
+            else if (item.AirPollution10 <= 150) 
                 $('#arduino_Air_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 2 +"px" });
             else 
                 $('#arduino_Air_Pos').css({ "position": "relative", "top": base_px_value + add_px_value * 2 +"px" });
@@ -401,7 +407,7 @@
             var add_px_value = 18;
             if(item.Temperature <= 16)
                 $('#arduino_Temp_Pos').css({ "position": "relative", "top": + base_px_value+add_px_value*1 + "px" });
-            else if (obser_V <= 29)
+            else if (item.Temperature <= 29)
                 $('#arduino_Temp_Pos').css({ "position": "relative", "top": + base_px_value+add_px_value*2 + "px" });
             else
                 $('#arduino_Temp_Pos').css({ "position": "relative", "top": + base_px_value+add_px_value*3 + "px" });
@@ -460,6 +466,7 @@
             if ((minutes == 00 || minutes == 10 || minutes == 20 || minutes == 30 || minutes == 40 || minutes == 50 || minutes == 60) && (seconds == 00 || seconds == 10 || seconds == 20 || seconds == 30 || seconds == 40 || seconds == 50 || seconds == 60)) {
                 weather_Check();
                 air_Pollution_Check();
+                get_Arduino();
             }
         }
 

@@ -54,6 +54,18 @@ body {
     transform: skew(-10deg);
     text-shadow: #533d4a 1px 1px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px;
 }
+.reload_Arduino{
+  color: #3bdab2;
+  text-transform: uppercase;
+  opacity: 0;
+}
+.reload_Arduino span{
+  cursor:default;
+  margin : 10px 0 10px 0;
+  transform: skew(-10deg);
+  text-shadow: #533d4a 1px 1px, #533d4a 2px 2px, #533d4a 3px 3px, #533d4a 4px 4px;
+}
+
 h1{
   color: #fff;
   text-transform: uppercase;
